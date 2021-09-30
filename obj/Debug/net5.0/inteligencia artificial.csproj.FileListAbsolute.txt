@@ -1,0 +1,18 @@
+E:\Arquivos\Códigos\inteligencia artificial\bin\Debug\net5.0\inteligencia artificial.exe
+E:\Arquivos\Códigos\inteligencia artificial\bin\Debug\net5.0\inteligencia artificial.deps.json
+E:\Arquivos\Códigos\inteligencia artificial\bin\Debug\net5.0\inteligencia artificial.runtimeconfig.json
+E:\Arquivos\Códigos\inteligencia artificial\bin\Debug\net5.0\inteligencia artificial.runtimeconfig.dev.json
+E:\Arquivos\Códigos\inteligencia artificial\bin\Debug\net5.0\inteligencia artificial.dll
+E:\Arquivos\Códigos\inteligencia artificial\bin\Debug\net5.0\ref\inteligencia artificial.dll
+E:\Arquivos\Códigos\inteligencia artificial\bin\Debug\net5.0\inteligencia artificial.pdb
+E:\Arquivos\Códigos\inteligencia artificial\obj\Debug\net5.0\inteligencia artificial.csproj.AssemblyReference.cache
+E:\Arquivos\Códigos\inteligencia artificial\obj\Debug\net5.0\inteligencia artificial.GeneratedMSBuildEditorConfig.editorconfig
+E:\Arquivos\Códigos\inteligencia artificial\obj\Debug\net5.0\inteligencia artificial.AssemblyInfoInputs.cache
+E:\Arquivos\Códigos\inteligencia artificial\obj\Debug\net5.0\inteligencia artificial.AssemblyInfo.cs
+E:\Arquivos\Códigos\inteligencia artificial\obj\Debug\net5.0\inteligencia artificial.csproj.CoreCompileInputs.cache
+E:\Arquivos\Códigos\inteligencia artificial\obj\Debug\net5.0\inteligencia artificial.dll
+E:\Arquivos\Códigos\inteligencia artificial\obj\Debug\net5.0\ref\inteligencia artificial.dll
+E:\Arquivos\Códigos\inteligencia artificial\obj\Debug\net5.0\inteligencia artificial.pdb
+E:\Arquivos\Códigos\inteligencia artificial\obj\Debug\net5.0\inteligencia artificial.genruntimeconfig.cache
+E:\Arquivos\Códigos\inteligencia artificial\bin\Debug\net5.0\FileHelpers.dll
+E:\Arquivos\Códigos\inteligencia artificial\obj\Debug\net5.0\inteligencia artificial.csproj.CopyComplete
