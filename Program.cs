@@ -71,7 +71,7 @@ namespace inteligencia_artificial
             try
             {
                 var engine = new FileHelperEngine<csvObject>();
-                var result = engine.ReadFile("../../../news_articles.csv");
+                var result = engine.ReadFile("./news_articles.csv");
 
                 foreach (csvObject obj in result)
                 {
