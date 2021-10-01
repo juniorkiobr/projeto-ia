@@ -1,10 +1,13 @@
 {
   "version": 2,
-  "dgSpecHash": "gx5iJaPY8i84ljGp4qavZr5bqAI3dcGd3AaWEzksWGBXMWNf6HQLr4QZl9OF+AH1OBIzl3ilFQb1DYU53W966A==",
+  "dgSpecHash": "hVqzXDJvquk200c3Vf3lg7K6MJjk9e9XRVfsA0t+APUfy6z9gfNTJJO27P4p/oIVyC7Kss+Ql+JO4+tWs7L3GQ==",
   "success": true,
   "projectFilePath": "E:\\Arquivos\\Códigos\\inteligencia artificial\\inteligencia artificial.csproj",
   "expectedPackageFiles": [
-    "C:\\Users\\Pichau\\.nuget\\packages\\filehelpers\\3.5.0\\filehelpers.3.5.0.nupkg.sha512"
+    "C:\\Users\\Pichau\\.nuget\\packages\\annytab.stemmer\\1.2.4\\annytab.stemmer.1.2.4.nupkg.sha512",
+    "C:\\Users\\Pichau\\.nuget\\packages\\dotnet-stop-words\\1.1.0\\dotnet-stop-words.1.1.0.nupkg.sha512",
+    "C:\\Users\\Pichau\\.nuget\\packages\\filehelpers\\3.5.0\\filehelpers.3.5.0.nupkg.sha512",
+    "C:\\Users\\Pichau\\.nuget\\packages\\newtonsoft.json\\12.0.3\\newtonsoft.json.12.0.3.nupkg.sha512"
   ],
   "logs": []
 }

@@ -40,9 +40,17 @@
         "net5.0": {
           "targetAlias": "net5.0",
           "dependencies": {
+            "Annytab.Stemmer": {
+              "target": "Package",
+              "version": "[1.2.4, )"
+            },
             "FileHelpers": {
               "target": "Package",
               "version": "[3.5.0, )"
+            },
+            "dotnet-stop-words": {
+              "target": "Package",
+              "version": "[1.1.0, )"
             }
           },
           "imports": [

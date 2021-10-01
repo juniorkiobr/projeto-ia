@@ -16,3 +16,6 @@ E:\Arquivos\Códigos\inteligencia artificial\obj\Debug\net5.0\inteligencia artif
 E:\Arquivos\Códigos\inteligencia artificial\obj\Debug\net5.0\inteligencia artificial.genruntimeconfig.cache
 E:\Arquivos\Códigos\inteligencia artificial\bin\Debug\net5.0\FileHelpers.dll
 E:\Arquivos\Códigos\inteligencia artificial\obj\Debug\net5.0\inteligencia artificial.csproj.CopyComplete
+E:\Arquivos\Códigos\inteligencia artificial\bin\Debug\net5.0\src.dll
+E:\Arquivos\Códigos\inteligencia artificial\bin\Debug\net5.0\Newtonsoft.Json.dll
+E:\Arquivos\Códigos\inteligencia artificial\bin\Debug\net5.0\Annytab.Stemmer.dll

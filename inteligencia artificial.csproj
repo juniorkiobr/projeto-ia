@@ -7,6 +7,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Annytab.Stemmer" Version="1.2.4" />
+    <PackageReference Include="dotnet-stop-words" Version="1.1.0" />
     <PackageReference Include="FileHelpers" Version="3.5.0" />
   </ItemGroup>
 
