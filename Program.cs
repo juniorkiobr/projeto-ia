@@ -3,6 +3,7 @@ using FileHelpers;
 using StopWord;
 using Annytab.Stemmer;
 using System;
+using System.Collections.Generic;
 
 namespace inteligencia_artificial
 {
@@ -44,44 +45,135 @@ namespace inteligencia_artificial
             {
                 var engine = new FileHelperEngine<csvObject>();
                 var result = engine.ReadFile("./news_articles.csv");
-                string[] words =  System.IO.File.ReadAllLines("./words.txt");
-                int realArticles = 0;
-                int fakeArticles = 0;
-                int outherArticles = 0;
-                Stemmer stemmer = new EnglishStemmer();
+                List<csvObject> realArticles = new List<csvObject>();
+                List<csvObject> fakeArticles = new List<csvObject>();
+                List<csvObject> outherArticles = new List<csvObject>();
 
                 foreach (csvObject obj in result)
                 {
-                    var tmp = obj.text.ToLower().RemoveStopWords("en");
-                    string tmp1 = "";
-                    foreach (String item in tmp.Split(' '))
-                    {
-                        if(item.Length > 1 && Array.IndexOf(words, item) > -1 ){
-                            tmp1 += stemmer.GetSteamWord(item)+" ";
-                        }
-                    }
-                    Console.WriteLine(tmp1.Length > 125? tmp1.Substring(0,125): tmp1);
-                    obj.text = tmp1;
-                    tmp = obj.title.ToLower().RemoveStopWords("en");
-                    obj.title = tmp;
+                    obj.text = processMessage(obj.text);
+                    // Console.WriteLine(obj.text.Length > 125 ? obj.text.Substring(0, 125) : obj.text);
+                    obj.title = processMessage(obj.text);
                     obj.label = obj.label.ToLower();
 
-
-                    if(obj.label == "fake"){
-                        fakeArticles++;
-                    }else if(obj.label == "real"){
-                        realArticles++;
-                    }else{
-                        outherArticles++;
+                    if (obj.label == "fake")
+                    {
+                        fakeArticles.Add(obj);
+                    }
+                    else if (obj.label == "real")
+                    {
+                        realArticles.Add(obj);
+                    }
+                    else
+                    {
+                        outherArticles.Add(obj);
                     }
                 }
 
-                Console.WriteLine("Informações do documento: \nReais: {0}\nFalsos: {0}\nOutros: {2}",realArticles,fakeArticles,outherArticles);
-            } catch(Exception error)
+                Console.WriteLine("Informações do documento: \nReais: {0}\nFalsos: {0}\nOutros: {2}", realArticles.Count, fakeArticles.Count, outherArticles.Count);
+                // printDictionary(wordCount(realArticles),"real");
+                // printDictionary(wordCount(fakeArticles),"fake");
+                // printDictionary(wordCount(outherArticles),"outher");
+                List<csvObject> allArticles = new List<csvObject>();
+                allArticles.AddRange(realArticles);
+                allArticles.AddRange(fakeArticles);
+                Dictionary<string,int> allWords = wordCount(allArticles);
+                Dictionary<string,int> fakeWords = wordCount(fakeArticles);
+                Dictionary<string,int> realWords = wordCount(realArticles);
+
+                foreach(var item in realArticles){
+                    fake(item.text,realWords,fakeWords,allWords);
+                }
+
+
+            }
+            catch (Exception error)
             {
                 Console.WriteLine(error);
             }
             
+        }
+
+
+        private static bool fake(string message,Dictionary<string, int> realWords,Dictionary<string, int> fakeWords,Dictionary<string, int> allWords,int s=1, double p=0.5, bool porcent=true){
+            double n = 0;
+            double spam_freq = 0;
+            double normal_freq = 0;
+
+            foreach (string word in processMessage(message).Split(' '))
+            {
+                if(fakeWords.ContainsKey(word)){
+                    spam_freq = (double) fakeWords[word] / (double) allWords[word];
+                }
+
+                if(realWords.ContainsKey(word)){
+                    normal_freq = (double) realWords[word] / (double) allWords[word];
+                }
+
+                if((spam_freq + normal_freq) != 0 && allWords.ContainsKey(word)){
+                    double analiseWord = spam_freq / (spam_freq + normal_freq);
+                    double corrAnalisedWord = (s*p + allWords[word] * analiseWord) / (allWords[word] + s);
+                    n += (Math.Log(1 - corrAnalisedWord) - Math.Log(corrAnalisedWord));
+                }
+            }
+
+            double result = 1/(1 + Math.Exp(n));
+
+            if(porcent){
+                Console.WriteLine("A probabilidade de ser um artigo falso é de :. {0:0.00} %",( result*100));
+            }else if(result> 0.5) {
+                return true;
+            }else{
+                return false;
+            }
+            return false;
+        }
+        private static void printDictionary(Dictionary<string, int> dicionarioReal, string labelType)
+        {
+            Console.WriteLine("Quantidade de Palavras Usadas em Artigos {0}:.",labelType == "fake"? "Falsos": labelType == "real"? "Reais":"Outros");
+            foreach (var item in dicionarioReal)
+            {
+                Console.WriteLine("{0} -- {1}", item.Key, item.Value);
+            }
+        }
+
+        private static Dictionary<string, int> wordCount(List<csvObject> lista)
+        {
+            Dictionary<string, int> dicionario = new Dictionary<string, int>();
+
+            foreach(csvObject obj in lista){
+                foreach (var item in obj.text.Split(' '))
+                {
+                    if (dicionario.ContainsKey(item))
+                    {
+                        dicionario[item]++;
+                    }
+                    else
+                    {
+                        dicionario.Add(item, 1);
+                    }
+                }
+            } 
+            
+            return dicionario;
+        }
+
+        private static string processMessage(string message)
+        {
+            string[] words = System.IO.File.ReadAllLines("./words.txt");
+            Stemmer stemmer = new EnglishStemmer();
+
+            string messageWithoutSW = message.ToLower().RemoveStopWords("en");
+            string processedMessage = "";
+            foreach (String item in messageWithoutSW.Split(' '))
+            {
+                if (item.Length > 1 && Array.IndexOf(words, item) > -1)
+                {
+                    processedMessage += stemmer.GetSteamWord(item) + " ";
+                }
+            }
+
+            return processedMessage;
         }
     }
 }
