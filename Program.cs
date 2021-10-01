@@ -5,62 +5,32 @@ using System;
 namespace inteligencia_artificial
 {
     [DelimitedRecord(",")]
+    [IgnoreEmptyLines()]
+    [IgnoreFirst()]
     class csvObject
     {
-        [FieldOptional]
-        string author;
+        /*
+                Para a criação da tabela só é necessário title, text, label
+        */
 
-        [FieldOptional]
-        string timestamp;
-
-        [FieldOptional]
-        string title;
-
-        [FieldOptional]
-        string language;
-        
-        [FieldOptional]
-        string type;
-        
-        [FieldOptional]
-        string label;
-        
-        [FieldOptional]
-        string withoutStopWords;
-        
-        [FieldOptional]
-        string hasImage;
-        
-        [FieldOptional]
-        string algo;
-        [FieldOptional]
-        string algo1;
-
-        [FieldOptional]
-        string algo2;
-
+        [FieldQuoted('"', QuoteMode.OptionalForBoth)]
+        public string title;
+        [FieldQuoted('"', QuoteMode.OptionalForBoth)]
+        public string text;
+        public string label;
         
 
-        public csvObject()
-        {
+        public csvObject(){
+        
 
-        }
-        public csvObject(string author, string timestamp, string title, string language, string type, string label, string withoutStopWords, string hasImage)
-        {
-            this.author = author;
-            this.timestamp = timestamp;
-            this.title = title;
-            this.language = language;
-            this.type = type;
-            this.label = label;
-            this.withoutStopWords = withoutStopWords;
-            this.hasImage = hasImage;
         }
 
         override
         public string ToString()
         {
-            return String.Format("{0} - {1} - {2} - {3}",this.author,this.timestamp,this.title,this.hasImage == "1" ? "Têm imagem" : "Não têm imagem");
+            return String.Format("{0} - {1} - {2}",
+                this.title.Length > 10? this.title.Substring(0,10) : this.title,
+                this.text.Length > 10? this.text.Substring(0,10) : this.text,this.label);
         }
     }
     
@@ -72,12 +42,24 @@ namespace inteligencia_artificial
             {
                 var engine = new FileHelperEngine<csvObject>();
                 var result = engine.ReadFile("./news_articles.csv");
+                int realArticles = 0;
+                int fakeArticles = 0;
+                int outherArticles = 0;
+
+
 
                 foreach (csvObject obj in result)
                 {
-                    Console.WriteLine("Informações do Artigo:. ");
-                    Console.Write(obj+"\n");
+                    if(obj.label.ToLower() == "fake"){
+                        fakeArticles++;
+                    }else if(obj.label.ToLower() == "real"){
+                        realArticles++;
+                    }else{
+                        outherArticles++;
+                    }
                 }
+
+                Console.WriteLine("Informações do documento: \nReais: {0}\nFalsos: {0}\nOutros: {2}",realArticles,fakeArticles,outherArticles);
             } catch(Exception error)
             {
                 Console.WriteLine(error);
