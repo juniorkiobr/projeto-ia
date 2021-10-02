@@ -70,20 +70,17 @@ namespace inteligencia_artificial
                     }
                 }
 
-                Console.WriteLine("Informações do documento: \nReais: {0}\nFalsos: {0}\nOutros: {2}", realArticles.Count, fakeArticles.Count, outherArticles.Count);
+                // Console.WriteLine("Informações do documento: \nReais: {0}\nFalsos: {0}\nOutros: {2}", realArticles.Count, fakeArticles.Count, outherArticles.Count);
                 // printDictionary(wordCount(realArticles),"real");
                 // printDictionary(wordCount(fakeArticles),"fake");
                 // printDictionary(wordCount(outherArticles),"outher");
-                List<csvObject> allArticles = new List<csvObject>();
-                allArticles.AddRange(realArticles);
-                allArticles.AddRange(fakeArticles);
-                Dictionary<string,int> allWords = wordCount(allArticles);
-                Dictionary<string,int> fakeWords = wordCount(fakeArticles);
-                Dictionary<string,int> realWords = wordCount(realArticles);
+                
 
-                foreach(var item in realArticles){
-                    fake(item.text,realWords,fakeWords,allWords);
-                }
+                // foreach(var item in realArticles){
+                //     fake(item.text,fakeArticles,realArticles);
+                // }
+
+                test(fakeArticles,realArticles,details:true);
 
 
             }
@@ -94,11 +91,61 @@ namespace inteligencia_artificial
             
         }
 
+        private static void test(List<csvObject> fakeArticles, List<csvObject> realArticles, int s=1, double i=0.5, bool details=false){
+            int fakeCount = 0;
+            int realCount = 0;
 
-        private static bool fake(string message,Dictionary<string, int> realWords,Dictionary<string, int> fakeWords,Dictionary<string, int> allWords,int s=1, double p=0.5, bool porcent=true){
+            foreach(var item in fakeArticles){
+                if(fake(item.text,fakeArticles,realArticles,porcent:false)){
+                    fakeCount++;
+                }else{
+                    realCount++;
+                }
+            }
+
+            int tp = fakeCount;
+            int fn = realCount;
+
+            fakeCount = 0;
+            realCount = 0;
+
+            foreach(var item in realArticles){
+                if(fake(item.text,fakeArticles,realArticles,porcent:false)){
+                    fakeCount++;
+                }else{
+                    realCount++;
+                }
+            }
+
+            int fp = fakeCount;
+            int tn = realCount;
+
+            double fakePrecision = ( (double) tp / (double) (tp+fp));
+            double fakeRecall = ( (double) tp/ (double) (tp+fn));
+            double fakeScore = 2*(fakePrecision * fakeRecall)/(fakePrecision + fakeRecall);
+
+            double realPrecision = ( (double) tn / (double) (tn+fn));
+            double realRecall =  ((double) tn/ (double) (tn+fp));
+            double realScore = 2*(realPrecision * realRecall)/(realPrecision + realRecall);
+
+            double balancedResult = (fakeRecall+realRecall)/2;
+
+            if(details){
+                Console.WriteLine("TP: {0}\nFN: {1}\nTN: {2}\nFP: {3}\n-----------------------\nPrecisão Falsos: {4:0.00}%\nRecall Falsos: {5:0.00}%\nF1-Score Falsos: {6:0.00}%\n-----------------------\nPrecisão Reais: {7:0.00}%\nRecall Reais: {8:0.00}%\nF1-Score Reais: {9:0.00}%\n-----------------------\nAcurácia: {10:0.00}%",tp,fn,tn,fp,fakePrecision*100,fakeRecall*100,fakeScore*100,realPrecision*100,realRecall*100,realScore*100,balancedResult*100);
+            }
+        }
+
+        private static bool fake(string message,List<csvObject> fakeArticles, List<csvObject> realArticles,int s=1, double p=0.5, bool porcent=true){
             double n = 0;
             double spam_freq = 0;
             double normal_freq = 0;
+
+            List<csvObject> allArticles = new List<csvObject>();
+            allArticles.AddRange(realArticles);
+            allArticles.AddRange(fakeArticles);
+            Dictionary<string,int> allWords = wordCount(allArticles);
+            Dictionary<string,int> fakeWords = wordCount(fakeArticles);
+            Dictionary<string,int> realWords = wordCount(realArticles);
 
             foreach (string word in processMessage(message).Split(' '))
             {
