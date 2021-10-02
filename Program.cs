@@ -49,7 +49,7 @@ namespace inteligencia_artificial
                 List<csvObject> fakeArticles = new List<csvObject>();
                 List<csvObject> outherArticles = new List<csvObject>();
 
-                foreach (var obj in result)
+                foreach (var obj in result[Range.StartAt(Convert.ToInt32(result.Length*0.25+1))])
                 {
                     obj.text = processMessage(obj.text);
                     obj.label = obj.label.ToLower();
