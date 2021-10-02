@@ -49,36 +49,26 @@ namespace inteligencia_artificial
                 List<csvObject> fakeArticles = new List<csvObject>();
                 List<csvObject> outherArticles = new List<csvObject>();
 
-                foreach (csvObject obj in result)
+                foreach (var obj in result)
                 {
                     obj.text = processMessage(obj.text);
-                    // Console.WriteLine(obj.text.Length > 125 ? obj.text.Substring(0, 125) : obj.text);
-                    obj.title = processMessage(obj.text);
                     obj.label = obj.label.ToLower();
 
-                    if (obj.label == "fake")
+                    switch (obj.label)
                     {
-                        fakeArticles.Add(obj);
-                    }
-                    else if (obj.label == "real")
-                    {
-                        realArticles.Add(obj);
-                    }
-                    else
-                    {
-                        outherArticles.Add(obj);
+                        case "fake":
+                                fakeArticles.Add(obj);
+                                break;
+                        case "real":
+                                realArticles.Add(obj);
+                                break;
+                        default:
+                                outherArticles.Add(obj);
+                                break;
                     }
                 }
 
-                // Console.WriteLine("Informações do documento: \nReais: {0}\nFalsos: {0}\nOutros: {2}", realArticles.Count, fakeArticles.Count, outherArticles.Count);
-                // printDictionary(wordCount(realArticles),"real");
-                // printDictionary(wordCount(fakeArticles),"fake");
-                // printDictionary(wordCount(outherArticles),"outher");
-                
-
-                // foreach(var item in realArticles){
-                //     fake(item.text,fakeArticles,realArticles);
-                // }
+                Console.WriteLine("Informações do documento: \nReais: {0}\nFalsos: {1}\nOutros: {2}\n-----------------", realArticles.Count, fakeArticles.Count, outherArticles.Count);
 
                 test(fakeArticles,realArticles,details:true);
 
@@ -95,6 +85,17 @@ namespace inteligencia_artificial
             int fakeCount = 0;
             int realCount = 0;
 
+            /*
+                Quero saber se o que existe no fakeArticles é falso
+                ou seja se é falso ele é verdadeiramente positivo
+
+                TP == O que está separado na tabela de "fake" é realmente uma noticia falsa.
+                TN == O que está separado na tabela de "real" é realmente uma noticia verdadeira.
+                FP == O que está separado na tabela de "fake" é realmente uma noticia verdadeira.
+                FN == O que está separado na tabela de "real" é realmente uma noticia falsa.
+            
+            */
+
             foreach(var item in fakeArticles){
                 if(fake(item.text,fakeArticles,realArticles,porcent:false)){
                     fakeCount++;
@@ -103,8 +104,8 @@ namespace inteligencia_artificial
                 }
             }
 
-            int tp = fakeCount;
-            int fn = realCount;
+            int truePositive = fakeCount;
+            int falsePositive = realCount;
 
             fakeCount = 0;
             realCount = 0;
@@ -117,21 +118,21 @@ namespace inteligencia_artificial
                 }
             }
 
-            int fp = fakeCount;
-            int tn = realCount;
+            int falseNegative = fakeCount;
+            int trueNegative = realCount;
 
-            double fakePrecision = ( (double) tp / (double) (tp+fp));
-            double fakeRecall = ( (double) tp/ (double) (tp+fn));
+            double fakePrecision = ( (double) truePositive / (double) (truePositive+falsePositive));
+            double fakeRecall = ( (double) truePositive/ (double) (truePositive+falseNegative));
             double fakeScore = 2*(fakePrecision * fakeRecall)/(fakePrecision + fakeRecall);
 
-            double realPrecision = ( (double) tn / (double) (tn+fn));
-            double realRecall =  ((double) tn/ (double) (tn+fp));
+            double realPrecision = ( (double) trueNegative / (double) (trueNegative+falseNegative));
+            double realRecall =  ((double) trueNegative/ (double) (trueNegative+falsePositive));
             double realScore = 2*(realPrecision * realRecall)/(realPrecision + realRecall);
 
             double balancedResult = (fakeRecall+realRecall)/2;
 
             if(details){
-                Console.WriteLine("TP: {0}\nFN: {1}\nTN: {2}\nFP: {3}\n-----------------------\nPrecisão Falsos: {4:0.00}%\nRecall Falsos: {5:0.00}%\nF1-Score Falsos: {6:0.00}%\n-----------------------\nPrecisão Reais: {7:0.00}%\nRecall Reais: {8:0.00}%\nF1-Score Reais: {9:0.00}%\n-----------------------\nAcurácia: {10:0.00}%",tp,fn,tn,fp,fakePrecision*100,fakeRecall*100,fakeScore*100,realPrecision*100,realRecall*100,realScore*100,balancedResult*100);
+                Console.WriteLine("TruePosive: {0}\nFalseNegative: {1}\nTrueNegative: {2}\nFalsePositive: {3}\n-----------------------\nPrecisão Falsos: {4:0.00}%\nRecall Falsos: {5:0.00}%\nF1-Score Falsos: {6:0.00}%\n-----------------------\nPrecisão Reais: {7:0.00}%\nRecall Reais: {8:0.00}%\nF1-Score Reais: {9:0.00}%\n-----------------------\nAcurácia: {10:0.00}%",truePositive,falseNegative,trueNegative,falsePositive,fakePrecision*100,fakeRecall*100,fakeScore*100,realPrecision*100,realRecall*100,realScore*100,balancedResult*100);
             }
         }
 
@@ -146,6 +147,7 @@ namespace inteligencia_artificial
             Dictionary<string,int> allWords = wordCount(allArticles);
             Dictionary<string,int> fakeWords = wordCount(fakeArticles);
             Dictionary<string,int> realWords = wordCount(realArticles);
+            
 
             foreach (string word in processMessage(message).Split(' '))
             {
